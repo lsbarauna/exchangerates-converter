@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -53,5 +54,9 @@ public class DefaultExchangeRatesService implements ExchangeRatesService {
         return transactionRespository.save(transaction);
     }
 
+    @Override
+    public List<TransactionOutbound> listTransactions(Long userId) {
+        return transactionMapper.toTransactionOutboundList(transactionRespository.findByUserId(userId));
+    }
 
 }

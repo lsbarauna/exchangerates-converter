@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface ExchangeRatesService {
     TransactionOutbound convertCurrency(TransactionInbound transactionInbound);
-
+    List<TransactionOutbound> listTransactions(Long userId);
 }

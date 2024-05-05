@@ -17,7 +17,10 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -107,6 +110,19 @@ class DefaultExchangeRatesServiceTest {
         assertNotNull(transactionOutbound.getDateTime());
     }
 
+    @Test
+    void listTransactions_ReturnsListTransactionOutbound() {
+        Long userId = 1L;
+
+        List<Transaction> transactionList = getTransactions();
+
+        when(transactionRepository.findByUserId(userId)).thenReturn(transactionList);
+
+        List<TransactionOutbound> transactionOutboundList = transactionMapper.toTransactionOutboundList(transactionList);
+
+        assertEquals(transactionOutboundList, exchangeRatesService.listTransactions(userId));
+
+    }
     private ExchangeRatesData getExchangeRatesData() {
         ExchangeRatesData exchangeRatesData = new ExchangeRatesData();
         exchangeRatesData.setRates(new HashMap<>());
@@ -115,5 +131,30 @@ class DefaultExchangeRatesServiceTest {
         exchangeRatesData.getRates().put("EUR", 1.0);
         exchangeRatesData.getRates().put("EUR", 170d);
         return exchangeRatesData;
+    }
+
+    private List<Transaction> getTransactions() {
+
+        Transaction transaction1 = Transaction.builder()
+                .transactionId(1L)
+                .sourceCurrency("BRL")
+                .targetCurrency("EUR")
+                .conversionRate(34.0)
+                .sourceAmount(100D)
+                .targetAmount(3400.0)
+                .dateTime(LocalDateTime.now())
+                .build();
+
+        Transaction transaction2 = Transaction.builder()
+                .transactionId(2L)
+                .sourceCurrency("BRL")
+                .targetCurrency("EUR")
+                .conversionRate(54.0)
+                .sourceAmount(100D)
+                .targetAmount(5400.0)
+                .dateTime(LocalDateTime.now())
+                .build();
+
+        return Arrays.asList(new Transaction[]{transaction1, transaction2});
     }
 }
