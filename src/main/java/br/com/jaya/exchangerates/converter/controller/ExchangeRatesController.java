@@ -20,6 +20,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/exchangerates")
@@ -94,6 +96,25 @@ public class ExchangeRatesController {
         TransactionOutbound transactionOutbound = exchangeRatesService.convertCurrency(transactionInbound);
 
         return ResponseEntity.status(HttpStatus.OK).body(transactionOutbound);
+    }
+    @Operation(summary = "List Transactions",
+            description = "List all transactions of the current user",
+            parameters = {
+                    @Parameter(
+                            name = "X-API-KEY",
+                            description = "API Access Key",
+                            required = true,
+                            in = ParameterIn.HEADER,
+                            example = "d4a5725e7dc182b0c41f8d07b0d1a08d"
+                    )
+            }
+    )
+    @GetMapping("/transactions")
+    public ResponseEntity<List<TransactionOutbound>> listTransactions() {
+
+        List<TransactionOutbound> transactionOutboundList = exchangeRatesService.listTransactions(getLoggedUser());
+
+        return ResponseEntity.status(HttpStatus.OK).body(transactionOutboundList);
     }
 
     private Long getLoggedUser() {
