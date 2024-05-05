@@ -4,15 +4,13 @@ import br.com.jaya.exchangerates.converter.client.apilayer.ExchangeRatesData;
 import br.com.jaya.exchangerates.converter.entity.Transaction;
 import br.com.jaya.exchangerates.converter.entity.User;
 import br.com.jaya.exchangerates.converter.exception.ApplicationException;
+import br.com.jaya.exchangerates.converter.exception.AuthenticationException;
 import br.com.jaya.exchangerates.converter.mapper.TransactionMapper;
 import br.com.jaya.exchangerates.converter.mapper.UserMapper;
 import br.com.jaya.exchangerates.converter.repository.ExchangeRatesDataRapository;
 import br.com.jaya.exchangerates.converter.repository.TransactionRespository;
 import br.com.jaya.exchangerates.converter.repository.UserRepository;
-import br.com.jaya.exchangerates.converter.to.TransactionInbound;
-import br.com.jaya.exchangerates.converter.to.TransactionOutbound;
-import br.com.jaya.exchangerates.converter.to.UserInBound;
-import br.com.jaya.exchangerates.converter.to.UserOutbound;
+import br.com.jaya.exchangerates.converter.to.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -88,4 +86,21 @@ public class DefaultExchangeRatesService implements ExchangeRatesService {
         return userMapper.toUserOutbound(user);
     }
 
+    @Override
+    public NewApikeyOutbound generateNewApiKey(NewApikeyInbound newApikeyInbound) {
+
+        Optional<User> userOptional = userRepository.findByEmail(newApikeyInbound.getEmail());
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            String encryptPassword = encrypt(newApikeyInbound.getEmail(), newApikeyInbound.getPassword());
+            if (encryptPassword.equals(user.getPassword())) {
+                String newApiKey = encryptWithRandomSault(user.getEmail());
+                user.setApikey(newApiKey);
+                userRepository.save(user);
+                return new NewApikeyOutbound(newApiKey);
+            }
+        }
+        throw new AuthenticationException("Invalid Credentials");
+    }
 }
