@@ -153,7 +153,7 @@
 				</executions>
 				<configuration>
 					<excludes>
-						<exclude>**/dto/*/**</exclude>
+						<exclude>**/to/*/**</exclude>
 						<exclude>**/mapper/*/**</exclude>
 						<exclude>**/client/*/**</exclude>
 						<exclude>**/*Controller.*</exclude>

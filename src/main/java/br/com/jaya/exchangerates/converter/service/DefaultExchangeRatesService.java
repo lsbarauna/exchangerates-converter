@@ -10,7 +10,12 @@ import br.com.jaya.exchangerates.converter.mapper.UserMapper;
 import br.com.jaya.exchangerates.converter.repository.ExchangeRatesDataRapository;
 import br.com.jaya.exchangerates.converter.repository.TransactionRespository;
 import br.com.jaya.exchangerates.converter.repository.UserRepository;
-import br.com.jaya.exchangerates.converter.to.*;
+import br.com.jaya.exchangerates.converter.to.NewApikeyOutbound;
+import br.com.jaya.exchangerates.converter.to.TransactionOutbound;
+import br.com.jaya.exchangerates.converter.to.TransactionInbound;
+import br.com.jaya.exchangerates.converter.to.UserInBound;
+import br.com.jaya.exchangerates.converter.to.UserOutbound;
+import br.com.jaya.exchangerates.converter.to.NewApikeyInbound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

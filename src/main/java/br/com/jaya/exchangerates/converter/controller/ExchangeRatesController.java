@@ -2,7 +2,12 @@ package br.com.jaya.exchangerates.converter.controller;
 
 import br.com.jaya.exchangerates.converter.security.ApiKeyAuthentication;
 import br.com.jaya.exchangerates.converter.service.ExchangeRatesService;
-import br.com.jaya.exchangerates.converter.to.*;
+import br.com.jaya.exchangerates.converter.to.NewApikeyOutbound;
+import br.com.jaya.exchangerates.converter.to.TransactionOutbound;
+import br.com.jaya.exchangerates.converter.to.TransactionInbound;
+import br.com.jaya.exchangerates.converter.to.UserInBound;
+import br.com.jaya.exchangerates.converter.to.UserOutbound;
+import br.com.jaya.exchangerates.converter.to.NewApikeyInbound;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
