@@ -2,18 +2,27 @@ package br.com.jaya.exchangerates.converter.service;
 
 import br.com.jaya.exchangerates.converter.client.apilayer.ExchangeRatesData;
 import br.com.jaya.exchangerates.converter.entity.Transaction;
+import br.com.jaya.exchangerates.converter.entity.User;
 import br.com.jaya.exchangerates.converter.exception.ApplicationException;
 import br.com.jaya.exchangerates.converter.mapper.TransactionMapper;
+import br.com.jaya.exchangerates.converter.mapper.UserMapper;
 import br.com.jaya.exchangerates.converter.repository.ExchangeRatesDataRapository;
 import br.com.jaya.exchangerates.converter.repository.TransactionRespository;
+import br.com.jaya.exchangerates.converter.repository.UserRepository;
 import br.com.jaya.exchangerates.converter.to.TransactionInbound;
 import br.com.jaya.exchangerates.converter.to.TransactionOutbound;
+import br.com.jaya.exchangerates.converter.to.UserInBound;
+import br.com.jaya.exchangerates.converter.to.UserOutbound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
+import static br.com.jaya.exchangerates.converter.util.EncryptUtil.encrypt;
+import static br.com.jaya.exchangerates.converter.util.EncryptUtil.encryptWithRandomSault;
 
 @Service
 public class DefaultExchangeRatesService implements ExchangeRatesService {
@@ -23,7 +32,10 @@ public class DefaultExchangeRatesService implements ExchangeRatesService {
     private ExchangeRatesDataRapository exchangeRatesDataRapository;
     @Autowired
     private TransactionMapper transactionMapper;
-
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public TransactionOutbound convertCurrency(TransactionInbound transactionInbound) {
@@ -57,6 +69,23 @@ public class DefaultExchangeRatesService implements ExchangeRatesService {
     @Override
     public List<TransactionOutbound> listTransactions(Long userId) {
         return transactionMapper.toTransactionOutboundList(transactionRespository.findByUserId(userId));
+    }
+    @Override
+    public UserOutbound createUser(UserInBound userInBound) {
+
+        Optional<User> userOptional =  userRepository.findByEmail(userInBound.getEmail());
+
+        if(userOptional.isPresent()){
+            throw new ApplicationException("Email already in use");
+        }
+
+        User user = userMapper.toUser(userInBound);
+
+        user.setPassword(encrypt(user.getEmail(), user.getPassword()));
+        user.setApikey(encryptWithRandomSault(user.getEmail()));
+        user = userRepository.save(user);
+
+        return userMapper.toUserOutbound(user);
     }
 
 }
