@@ -2,14 +2,19 @@ package br.com.jaya.exchangerates.converter.service;
 
 import br.com.jaya.exchangerates.converter.client.apilayer.ExchangeRatesData;
 import br.com.jaya.exchangerates.converter.entity.Transaction;
+import br.com.jaya.exchangerates.converter.entity.User;
 import br.com.jaya.exchangerates.converter.exception.ApplicationException;
 import br.com.jaya.exchangerates.converter.mapper.TransactionMapper;
 import br.com.jaya.exchangerates.converter.mapper.TransactionMapperImpl;
+import br.com.jaya.exchangerates.converter.mapper.UserMapper;
+import br.com.jaya.exchangerates.converter.mapper.UserMapperImpl;
 import br.com.jaya.exchangerates.converter.repository.ExchangeRatesDataRapository;
 import br.com.jaya.exchangerates.converter.repository.TransactionRespository;
 import br.com.jaya.exchangerates.converter.repository.UserRepository;
 import br.com.jaya.exchangerates.converter.to.TransactionInbound;
 import br.com.jaya.exchangerates.converter.to.TransactionOutbound;
+import br.com.jaya.exchangerates.converter.to.UserInBound;
+import br.com.jaya.exchangerates.converter.to.UserOutbound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +26,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -31,6 +37,7 @@ class DefaultExchangeRatesServiceTest {
 
     @Mock
     private TransactionRespository transactionRepository;
+
     @Mock
     private ExchangeRatesDataRapository exchangeRatesDataRepository;
 
@@ -46,6 +53,8 @@ class DefaultExchangeRatesServiceTest {
     @Spy
     private TransactionMapper transactionMapper = new TransactionMapperImpl();
 
+    @Spy
+    private UserMapper userMapper = new UserMapperImpl();
 
     @BeforeEach
     void setUp() {
@@ -123,6 +132,30 @@ class DefaultExchangeRatesServiceTest {
         assertEquals(transactionOutboundList, exchangeRatesService.listTransactions(userId));
 
     }
+
+    @Test
+    void createUser_EmailAlreadyInuse_ReturnApplicationException() {
+
+        Optional<User> userOptional = getRegisteredUser();
+        UserInBound userInBound = getUserInBound();
+        when(userRepository.findByEmail(userInBound.getEmail())).thenReturn(userOptional);
+
+        ApplicationException exception = assertThrows(ApplicationException.class, () -> exchangeRatesService.createUser(userInBound));
+        assertEquals("Email already in use", exception.getMessage());
+    }
+
+    @Test
+    void createUser_ReturnUserOutbound() {
+        UserInBound userInBound = getUserInBound();
+        UserOutbound userOutboundExpected = getUserOutbound();
+
+        when(userRepository.findByEmail(userInBound.getEmail())).thenReturn(Optional.empty());
+        when(userRepository.save(any())).thenReturn(getRegisteredUser().get());
+
+        UserOutbound userOutboundActual = exchangeRatesService.createUser(userInBound);
+
+        assertEquals(userOutboundExpected, userOutboundActual);
+    }
     private ExchangeRatesData getExchangeRatesData() {
         ExchangeRatesData exchangeRatesData = new ExchangeRatesData();
         exchangeRatesData.setRates(new HashMap<>());
@@ -132,7 +165,6 @@ class DefaultExchangeRatesServiceTest {
         exchangeRatesData.getRates().put("EUR", 170d);
         return exchangeRatesData;
     }
-
     private List<Transaction> getTransactions() {
 
         Transaction transaction1 = Transaction.builder()
@@ -157,4 +189,29 @@ class DefaultExchangeRatesServiceTest {
 
         return Arrays.asList(new Transaction[]{transaction1, transaction2});
     }
+    private Optional<User> getRegisteredUser(){
+
+        return Optional.ofNullable(User.builder()
+                .userId(1L)
+                .name("Luiz")
+                .password("e248efe072a175659f89e68c3990d8a5")
+                .email("luiz@teste.com")
+                .apikey("a5ae673d347e061b671cdecdf1f0c128").build());
+    }
+    private UserInBound getUserInBound() {
+
+        return UserInBound.builder()
+                .name("Luiz")
+                .email("luiz@teste.com")
+                .password("12345").build();
+    }
+    private UserOutbound getUserOutbound() {
+
+        return UserOutbound.builder()
+                .userId(1L)
+                .name("Luiz")
+                .email("luiz@teste.com")
+                .apikey("a5ae673d347e061b671cdecdf1f0c128").build();
+    }
+
 }
