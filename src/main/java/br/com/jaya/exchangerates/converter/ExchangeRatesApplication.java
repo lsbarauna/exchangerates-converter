@@ -18,14 +18,14 @@ import org.springframework.context.annotation.Configuration;
 
 import java.time.format.DateTimeFormatter;
 
-import static org.hibernate.type.descriptor.java.JdbcDateJavaType.DATE_FORMAT;
-import static org.mapstruct.ap.internal.util.JodaTimeConstants.DATE_TIME_FORMAT;
-
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class, UserDetailsServiceAutoConfiguration.class})
 @EnableFeignClients("br.com.jaya.exchangerates.converter")
 @ImportAutoConfiguration({FeignAutoConfiguration.class})
 @Configuration
 public class ExchangeRatesApplication {
+	private static final String DATE_FORMAT = "yyyy-MM-dd";
+	private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
 	public static void main(String[] args) {
 		SpringApplication.run(ExchangeRatesApplication.class, args);
 	}
