@@ -11,10 +11,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.time.format.DateTimeFormatter;
 
@@ -22,6 +24,8 @@ import java.time.format.DateTimeFormatter;
 @EnableFeignClients("br.com.jaya.exchangerates.converter")
 @ImportAutoConfiguration({FeignAutoConfiguration.class})
 @Configuration
+@EnableCaching
+@EnableScheduling
 public class ExchangeRatesApplication {
 	private static final String DATE_FORMAT = "yyyy-MM-dd";
 	private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
