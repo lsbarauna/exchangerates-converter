@@ -4,6 +4,7 @@ import br.com.jaya.exchangerates.converter.client.apilayer.ExchangeRatesData;
 import br.com.jaya.exchangerates.converter.entity.Transaction;
 import br.com.jaya.exchangerates.converter.entity.User;
 import br.com.jaya.exchangerates.converter.exception.ApplicationException;
+import br.com.jaya.exchangerates.converter.exception.AuthenticationException;
 import br.com.jaya.exchangerates.converter.mapper.TransactionMapper;
 import br.com.jaya.exchangerates.converter.mapper.TransactionMapperImpl;
 import br.com.jaya.exchangerates.converter.mapper.UserMapper;
@@ -11,10 +12,7 @@ import br.com.jaya.exchangerates.converter.mapper.UserMapperImpl;
 import br.com.jaya.exchangerates.converter.repository.ExchangeRatesDataRapository;
 import br.com.jaya.exchangerates.converter.repository.TransactionRespository;
 import br.com.jaya.exchangerates.converter.repository.UserRepository;
-import br.com.jaya.exchangerates.converter.to.TransactionInbound;
-import br.com.jaya.exchangerates.converter.to.TransactionOutbound;
-import br.com.jaya.exchangerates.converter.to.UserInBound;
-import br.com.jaya.exchangerates.converter.to.UserOutbound;
+import br.com.jaya.exchangerates.converter.to.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -155,6 +153,29 @@ class DefaultExchangeRatesServiceTest {
         UserOutbound userOutboundActual = exchangeRatesService.createUser(userInBound);
 
         assertEquals(userOutboundExpected, userOutboundActual);
+    }
+    @Test
+    void generateNewApiKey_WithInvalidCredentials_ReturnAuthenticationException() {
+
+        NewApikeyInbound newApikeyInbound = NewApikeyInbound.builder().email("luiz@teste.com").password("12").build();
+
+        when(userRepository.findByEmail(newApikeyInbound.getEmail())).thenReturn(getRegisteredUser());
+
+        AuthenticationException exception = assertThrows(AuthenticationException.class, () -> exchangeRatesService.generateNewApiKey(newApikeyInbound));
+        assertEquals("Invalid Credentials", exception.getMessage());
+    }
+
+    @Test
+    void generateNewApiKey_WithValidCredentials_ReturnNewApikeyOutbound() {
+
+        NewApikeyInbound newApikeyInbound = NewApikeyInbound.builder().email("luiz@teste.com").password("1234").build();
+
+        when(userRepository.findByEmail(newApikeyInbound.getEmail())).thenReturn(getRegisteredUser());
+
+        NewApikeyOutbound newApikeyOutbound =  exchangeRatesService.generateNewApiKey(newApikeyInbound);
+
+        assertNotNull(newApikeyOutbound);
+        assertNotNull(newApikeyOutbound.getNewApiKey());
     }
     private ExchangeRatesData getExchangeRatesData() {
         ExchangeRatesData exchangeRatesData = new ExchangeRatesData();
