@@ -2,10 +2,7 @@ package br.com.jaya.exchangerates.converter.controller;
 
 import br.com.jaya.exchangerates.converter.security.ApiKeyAuthentication;
 import br.com.jaya.exchangerates.converter.service.ExchangeRatesService;
-import br.com.jaya.exchangerates.converter.to.TransactionInbound;
-import br.com.jaya.exchangerates.converter.to.TransactionOutbound;
-import br.com.jaya.exchangerates.converter.to.UserInBound;
-import br.com.jaya.exchangerates.converter.to.UserOutbound;
+import br.com.jaya.exchangerates.converter.to.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -115,6 +112,20 @@ public class ExchangeRatesController {
         List<TransactionOutbound> transactionOutboundList = exchangeRatesService.listTransactions(getLoggedUser());
 
         return ResponseEntity.status(HttpStatus.OK).body(transactionOutboundList);
+    }
+
+    @Operation(summary = "Generate New API Key",
+            description = "Generate a new API key for the user",
+            responses = {
+                    @ApiResponse(responseCode = "200",  content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = NewApikeyOutbound.class))
+                    })
+            }
+    )
+    @PutMapping("/new-apikey")
+    public ResponseEntity<NewApikeyOutbound> generateNewApiKey(@RequestBody NewApikeyInbound newApikeyInbound) {
+        NewApikeyOutbound apikey = exchangeRatesService.generateNewApiKey(newApikeyInbound);
+        return ResponseEntity.status(HttpStatus.CREATED).body(apikey);
     }
 
     private Long getLoggedUser() {
