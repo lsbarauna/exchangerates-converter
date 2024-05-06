@@ -2,6 +2,7 @@ package br.com.jaya.exchangerates.converter.exception;
 
 import br.com.jaya.exchangerates.converter.to.ErrorOutbound;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -17,38 +18,44 @@ import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorOutbound> handlerException(Exception ex) {
-        ex.printStackTrace();
-        ErrorOutbound ErrorOutbound = new ErrorOutbound(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong");
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ErrorOutbound);
+
+        ErrorOutbound errorOutbound = new ErrorOutbound(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong");
+        log.error("INTERNAL_SERVER_ERROR: " + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorOutbound);
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ErrorOutbound> handlerNoResourceFoundException(NoResourceFoundException ex) {
-        ErrorOutbound ErrorOutbound = new ErrorOutbound(HttpStatus.NOT_FOUND, ex.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorOutbound);
+        ErrorOutbound errorOutbound = new ErrorOutbound(HttpStatus.NOT_FOUND, ex.getMessage());
+        log.error("NOT_FOUND: " + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorOutbound);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseBody
     public ResponseEntity<ErrorOutbound> handlerAccessDeniedException(ApplicationException ex) {
-        ErrorOutbound ErrorOutbound = new ErrorOutbound(HttpStatus.FORBIDDEN, ex.getMessage());
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ErrorOutbound);
+        ErrorOutbound errorOutbound = new ErrorOutbound(HttpStatus.FORBIDDEN, ex.getMessage());
+        log.error("FORBIDDEN: " + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorOutbound);
     }
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ErrorOutbound> handlerAuthenticationException(AuthenticationException ex) {
-        ErrorOutbound ErrorOutbound = new ErrorOutbound(HttpStatus.UNAUTHORIZED, ex.getMessage());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorOutbound);
+        ErrorOutbound errorOutbound = new ErrorOutbound(HttpStatus.UNAUTHORIZED, ex.getMessage());
+        log.error("UNAUTHORIZED: " + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorOutbound);
     }
 
     @ExceptionHandler(ApplicationException.class)
     public ResponseEntity<ErrorOutbound> handlerResourceNotFoundException(ApplicationException ex) {
-        ErrorOutbound ErrorOutbound = new ErrorOutbound(HttpStatus.BAD_REQUEST, ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorOutbound);
+        ErrorOutbound errorOutbound = new ErrorOutbound(HttpStatus.BAD_REQUEST, ex.getMessage());
+        log.error("BAD_REQUEST: " + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorOutbound);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -65,14 +72,16 @@ public class GlobalExceptionHandler {
             break;
         }
 
-        ErrorOutbound ErrorOutbound = new ErrorOutbound(HttpStatus.BAD_REQUEST, erroMessage);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorOutbound);
+        ErrorOutbound errorOutbound = new ErrorOutbound(HttpStatus.BAD_REQUEST, erroMessage);
+        log.error("BAD_REQUEST: " + erroMessage);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorOutbound);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorOutbound> handlerHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
-        ErrorOutbound ErrorOutbound = new ErrorOutbound(HttpStatus.BAD_REQUEST, "Request body is not readable: " + ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorOutbound);
+        ErrorOutbound errorOutbound = new ErrorOutbound(HttpStatus.BAD_REQUEST, "Request body is not readable: " + ex.getMessage());
+        log.error("BAD_REQUEST: " + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorOutbound);
     }
 
     @ExceptionHandler(InvalidFormatException.class)
@@ -80,8 +89,9 @@ public class GlobalExceptionHandler {
         String errorMessage = "Invalid format for field '" + ex.getPath().get(0).getFieldName() +
                 "': expected type " + ex.getTargetType().getSimpleName() +
                 ", found value '" + ex.getValue() + "'";
-        ErrorOutbound ErrorOutbound = new ErrorOutbound(HttpStatus.BAD_REQUEST, errorMessage);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorOutbound);
+        ErrorOutbound errorOutbound = new ErrorOutbound(HttpStatus.BAD_REQUEST, errorMessage);
+        log.error("BAD_REQUEST: " + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorOutbound);
     }
 
 }
