@@ -40,7 +40,6 @@ public class AuthenticationFilter extends GenericFilterBean {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 filterChain.doFilter(request, response);
             }else {
-                System.out.println(((HttpServletRequest) request).getServletPath());
                 sendNotAuthorizedRespose((HttpServletResponse) response);
             }
 
