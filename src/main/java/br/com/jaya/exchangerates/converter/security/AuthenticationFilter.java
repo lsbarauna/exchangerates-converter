@@ -50,7 +50,7 @@ public class AuthenticationFilter extends GenericFilterBean {
         httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         httpResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
         PrintWriter writer = httpResponse.getWriter();
-        ErrorOutbound errorResponse = new ErrorOutbound(HttpStatus.UNAUTHORIZED, "You have not provided a valid API access key. [Required format: X-API-KEY=YOUR_ACCESS_KEY]");
+        ErrorOutbound errorResponse = new ErrorOutbound(HttpStatus.UNAUTHORIZED, "You have not provided a valid API Access Key. [Required format: X-API-KEY=YOUR_ACCESS_KEY]");
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(errorResponse);
         writer.print(json);
