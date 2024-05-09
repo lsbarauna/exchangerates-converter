@@ -9,7 +9,6 @@ public class ApiKeyAuthentication extends AbstractAuthenticationToken {
     private final String apiKey;
     private final Long userId;
 
-
     public ApiKeyAuthentication(Long  userId,String apiKey, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.userId = userId;

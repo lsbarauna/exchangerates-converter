@@ -31,13 +31,12 @@ public class DefaultExchangeRatesDataRapository implements ExchangeRatesDataRapo
             ResponseEntity<ExchangeRatesData> exchangeRatesDataResponseEntity = exchangeRatesDataAPI.getExchangeRatesData(apikey, symbols, base);
             return  exchangeRatesDataResponseEntity.getBody();
         }catch (Exception ex){
-            ex.printStackTrace();
-            throw new RuntimeException("System unavailable");
+            throw new RuntimeException("System unavailable",ex);
         }
     }
 
     @CacheEvict(allEntries = true, cacheNames = { "rates"})
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelay = 120000)
     public void cacheEvict() {
 
     }

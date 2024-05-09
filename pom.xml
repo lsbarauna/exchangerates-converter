@@ -163,6 +163,7 @@
 						<exclude>**/client/*/**</exclude>
 						<exclude>**/*Controller.*</exclude>
 						<exclude>**/entity/*/**</exclude>
+						<exclude>**/configuration/*/**</exclude>
 						<exclude>**/exception/*.**</exclude>
 						<exclude>**/repository/*.**</exclude>
 						<exclude>**/security/*.**</exclude>
