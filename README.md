@@ -97,7 +97,7 @@ often adapted in the Spring world as the "three-tier MVC" pattern.
 - controller - Controllers are managing the REST interface, interacting with services to perform operations on data, and returning an appropriate response to the client.
 - service - Contains business logic implementations, the middleware between Controller and Repository.
 - repository - Repositories are interfaces that define methods for performing persistence operations on the database, such as saving, updating, deleting, and retrieving entities
-- client - 
+- client - classe for making calls to RESTful services
 - entity - Entities represent the domain objects in your application. In the context of Spring and JPA (Java Persistence API), entities are typically mapped to tables in the database.
 - to - Is an object used to transfer data between application layers
 - exception - Handles application Exception
