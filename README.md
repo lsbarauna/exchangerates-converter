@@ -20,9 +20,6 @@ Features - Available Endpoints
 - /new-apikey Endipoint that allows the user to generate a new API Key.
 
 
-Layers
-========
-
 Requirements
 ========
 
