@@ -32,7 +32,7 @@ public class AuthenticationFilter extends GenericFilterBean {
             Authentication authentication = authenticationService.getAuthentication((HttpServletRequest) request);
 
         if(authentication!=null
-                    || ((HttpServletRequest) request).getServletPath().equals("/exchangerates/user")
+                    || ((HttpServletRequest) request).getServletPath().equals("/exchangerates/users")
                 || ((HttpServletRequest) request).getServletPath().equals("/exchangerates/new-apikey")
                 || ((HttpServletRequest) request).getServletPath().contains("swagger")
                 || ((HttpServletRequest) request).getServletPath().contains("api-docs")

@@ -25,7 +25,7 @@ public class SecurityConfig {
 
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
-                        authorizationManagerRequestMatcherRegistry.requestMatchers("/exchangerates/user").permitAll()
+                        authorizationManagerRequestMatcherRegistry.requestMatchers("/exchangerates/users").permitAll()
                                 .requestMatchers("/exchangerates/new-apikey").permitAll()
                                 .requestMatchers("/v3/api-docs/**",
                                         "/v3/api-docs/swagger-config",

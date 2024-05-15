@@ -14,7 +14,7 @@ provide an endpoint to query transactions performed by a user. The API supports 
 Features - Available Endpoints
 ========
 
-- /user Creates a new user associated with the API Key.
+- /users Creates a new user associated with the API Key.
 - /convert With this endpoint, we have any amount conversion from one currency to another.
 - /transactions Returns all transactions executed by the user.
 - /new-apikey Endipoint that allows the user to generate a new API Key.
