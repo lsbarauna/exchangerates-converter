@@ -59,7 +59,7 @@ Docker
 IDE
 ------
 
-    rum main class br.com.jaya.exchangerates.converter.ExchangeRatesApplication
+    run main class br.com.jaya.exchangerates.converter.ExchangeRatesApplication
 
 
 About the Service

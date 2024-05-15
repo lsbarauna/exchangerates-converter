@@ -1,5 +1,7 @@
-package br.com.jaya.exchangerates.converter.exception;
+package br.com.jaya.exchangerates.converter.handler;
 
+import br.com.jaya.exchangerates.converter.exception.ApplicationException;
+import br.com.jaya.exchangerates.converter.exception.AuthenticationException;
 import br.com.jaya.exchangerates.converter.to.ErrorOutbound;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import lombok.extern.slf4j.Slf4j;

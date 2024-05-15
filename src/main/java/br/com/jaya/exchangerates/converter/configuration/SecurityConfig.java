@@ -1,5 +1,7 @@
-package br.com.jaya.exchangerates.converter.security;
+package br.com.jaya.exchangerates.converter.configuration;
 
+import br.com.jaya.exchangerates.converter.security.AuthenticationFilter;
+import br.com.jaya.exchangerates.converter.security.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

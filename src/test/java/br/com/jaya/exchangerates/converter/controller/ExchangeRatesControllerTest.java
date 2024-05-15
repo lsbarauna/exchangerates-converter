@@ -51,7 +51,7 @@ public class ExchangeRatesControllerTest {
                 .contentType(ContentType.JSON)
                 .body(user)
                 .when()
-                .post("/exchangerates/user")
+                .post("/exchangerates/users")
                 .then()
                 .statusCode(201);
     }
@@ -69,7 +69,7 @@ public class ExchangeRatesControllerTest {
                 .contentType(ContentType.JSON)
                 .body(user)
                 .when()
-                .post("/exchangerates/user")
+                .post("/exchangerates/users")
                 .then()
                 .statusCode(400);
     }
@@ -96,7 +96,7 @@ public class ExchangeRatesControllerTest {
                 .contentType(ContentType.JSON)
                 .body(davidCostaUser)
                 .when()
-                .post("/exchangerates/user")
+                .post("/exchangerates/users")
                 .then()
                 .statusCode(400);
     }

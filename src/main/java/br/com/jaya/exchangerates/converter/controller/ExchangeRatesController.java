@@ -48,7 +48,7 @@ public class ExchangeRatesController {
             })
         }
     )
-    @PostMapping("/user")
+    @PostMapping("/users")
     public ResponseEntity<UserOutbound> createUser(@Valid @RequestBody UserInBound userInBound) {
         UserOutbound userOutbound = exchangeRatesService.createUser(userInBound);
         return ResponseEntity.status(HttpStatus.CREATED).body(userOutbound);
